@@ -11,22 +11,156 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .app-container {
     display: flex;
     flex-direction: column;
-    height: 600px;
+    height: 100%;
     width: 100%;
-    max-width: 400px;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+    box-shadow: none;
     overflow: hidden;
 }
 
-/* 윈도우 바 */
+.pc-layout {
+    display: flex;
+    flex: 1;
+    width: 100%;
+}
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.right-panel {
+    display: none;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== PC 버전 (1024px 이상) ===== */
+@media (min-width: 1024px) {
+    body {
+        padding: 20px;
+    }
+    
+    .app-container {
+        height: 600px;
+        max-width: 900px;
+        border-radius: 12px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .pc-layout {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+    
+    .left-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: white;
+    }
+    
+    .right-panel {
+        flex: 1;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .background-image {
+        width: 100%;
+        height: 100%;
+        background-image: url('background.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+/* ===== 태블릿 버전 (768px ~ 1023px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    body {
+        padding: 15px;
+    }
+    
+    .app-container {
+        height: 700px;
+        max-width: 600px;
+        border-radius: 10px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.18);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .pc-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    
+    .left-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .right-panel {
+        display: none;
+    }
+}
+
+/* ===== 모바일 버전 (767px 이하) ===== */
+@media (max-width: 767px) {
+    body {
+        padding: 0;
+        height: 100dvh;
+    }
+    
+    .app-container {
+        height: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .pc-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    
+    .left-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .right-panel {
+        display: none !important;
+    }
+}
+
+/* ===== 윈도우 바 ===== */
 .window-bar {
     background: #4f5f9f;
     color: white;
@@ -63,7 +197,7 @@ body {
     border-radius: 2px;
 }
 
-/* 헤더 */
+/* ===== 헤더 ===== */
 .header {
     background: linear-gradient(to right, #5a6fa0, #6875b8);
     color: white;
@@ -113,18 +247,20 @@ body {
     padding: 4px 8px;
 }
 
-/* 메인 컨텐츠 */
+/* ===== 메인 컨텐츠 ===== */
 .main-content {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tasks-container {
     width: 100%;
 }
 
-/* 할일 목록 */
+/* ===== 할일 목록 ===== */
 .todo-list {
     list-style: none;
     padding: 8px;
@@ -142,6 +278,8 @@ body {
     transition: all 0.2s ease;
     border-left: 3px solid #5a6fa0;
     position: relative;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .todo-item:hover {
@@ -173,6 +311,7 @@ body {
     font-size: 14px;
     word-break: break-word;
     line-height: 1.4;
+    overflow-wrap: break-word;
 }
 
 .edit-input {
@@ -217,8 +356,10 @@ body {
     transition: all 0.2s;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     color: #666;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .star-btn {
@@ -273,7 +414,7 @@ body {
     font-size: 14px;
 }
 
-/* 하단 입력 섹션 */
+/* ===== 하단 입력 섹션 ===== */
 .add-task-section {
     background: linear-gradient(to right, #5a6fa0, #6875b8);
     padding: 12px;
@@ -304,13 +445,20 @@ body {
     color: white;
     background: transparent;
     font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .task-input::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* 스크롤바 스타일 */
+.task-input:focus {
+    outline: none;
+}
+
+/* ===== 스크롤바 스타일 ===== */
 .main-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -328,25 +476,155 @@ body {
     background: #999;
 }
 
-/* 반응형 */
-@media (max-width: 480px) {
-    .app-container {
-        height: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        box-shadow: none;
+/* ===== 모바일 반응형 (767px 이하) ===== */
+@media (max-width: 767px) {
+    .window-bar {
+        display: none;
     }
-
+    
+    .header-top {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+    
     .header-top h1 {
-        font-size: 18px;
+        font-size: 16px;
+        gap: 6px;
     }
-
+    
+    .header-top h1 i {
+        font-size: 16px;
+    }
+    
+    .menu-btn {
+        font-size: 16px;
+        padding: 4px;
+    }
+    
+    .header-btn {
+        font-size: 14px;
+        padding: 4px;
+    }
+    
     .todo-item {
-        padding: 10px;
+        padding: 10px 8px;
+        gap: 8px;
+        margin-bottom: 2px;
     }
-
+    
+    .todo-text {
+        font-size: 13px;
+    }
+    
     .todo-actions {
         opacity: 1;
         gap: 2px;
+    }
+    
+    .star-btn,
+    .edit-btn,
+    .delete-btn,
+    .save-btn,
+    .cancel-btn {
+        font-size: 12px;
+        padding: 4px;
+    }
+    
+    .checkbox {
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+    }
+    
+    .add-task-section {
+        padding: 10px;
+    }
+    
+    .add-task-input-wrapper {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .add-task-input-wrapper i {
+        font-size: 14px;
+    }
+    
+    .task-input {
+        font-size: 13px;
+    }
+    
+    .window-bar {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .window-btn {
+        font-size: 12px;
+        padding: 2px 4px;
+    }
+    
+    .edit-input {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+    
+    .empty-message {
+        padding: 20px 16px;
+        font-size: 13px;
+    }
+}
+
+/* ===== 태블릿 반응형 (768px ~ 1023px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .window-bar {
+        display: flex;
+    }
+    
+    .header-top h1 {
+        font-size: 17px;
+    }
+    
+    .todo-item {
+        padding: 11px 10px;
+    }
+    
+    .todo-text {
+        font-size: 13.5px;
+    }
+}
+
+/* ===== PC 반응형 (1024px 이상) ===== */
+@media (min-width: 1024px) {
+    .window-bar {
+        display: flex;
+    }
+    
+    .todo-item:hover .todo-actions {
+        opacity: 1;
+    }
+    
+    .star-btn:hover {
+        color: #ffc107;
+    }
+    
+    .edit-btn:hover {
+        background: #e3f2fd;
+    }
+    
+    .delete-btn:hover {
+        background: #ffebee;
+    }
+}
+
+/* ===== 인쇄 스타일 ===== */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .app-container {
+        box-shadow: none;
+        height: auto;
     }
 }

@@ -2,63 +2,138 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>할일 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#5a6fa0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="To Do">
+    <title>Microsoft To Do</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- 상단 윈도우 바 -->
-        <div class="window-bar">
+        <!-- PC 버전: 상단 윈도우 바 -->
+        <div class="window-bar" id="windowBar">
             <span>To Do App</span>
             <div class="window-controls">
-                <button class="window-btn">−</button>
-                <button class="window-btn">□</button>
-                <button class="window-btn close">✕</button>
+                <button class="window-btn" title="최소화">−</button>
+                <button class="window-btn" title="최대화">□</button>
+                <button class="window-btn close" title="닫기">✕</button>
             </div>
         </div>
 
-        <!-- 헤더 -->
-        <div class="header">
-            <div class="header-top">
-                <button class="menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1>
-                    <i class="fas fa-home"></i>
-                    Tasks
-                </h1>
-                <div class="header-right">
-                    <button class="header-btn">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
+        <!-- PC 레이아웃: 반반 화면 -->
+        <div class="pc-layout" id="pcLayout">
+            <!-- 왼쪽: 할일 목록 -->
+            <div class="left-panel">
+                <!-- 헤더 -->
+                <div class="header">
+                    <div class="header-top">
+                        <button class="menu-btn" title="메뉴">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h1>
+                            <i class="fas fa-home"></i>
+                            <span class="header-text">Tasks</span>
+                        </h1>
+                        <div class="header-right">
+                            <button class="header-btn" title="더보기">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 메인 컨텐츠 -->
+                <div class="main-content">
+                    <div class="tasks-container">
+                        <!-- 할일 목록 -->
+                        <ul id="todoList" class="todo-list"></ul>
+                    </div>
+                </div>
+
+                <!-- 하단 입력 섹션 -->
+                <div class="add-task-section">
+                    <div class="add-task-input-wrapper">
+                        <i class="fas fa-plus"></i>
+                        <input 
+                            type="text" 
+                            id="todoInput" 
+                            placeholder="Add a task"
+                            class="task-input"
+                            autocomplete="off"
+                            spellcheck="true"
+                        >
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 메인 컨텐츠 -->
-        <div class="main-content">
-            <div class="tasks-container">
-                <!-- 할일 목록 -->
-                <ul id="todoList" class="todo-list"></ul>
-            </div>
-        </div>
-
-        <!-- 하단 입력 섹션 -->
-        <div class="add-task-section">
-            <div class="add-task-input-wrapper">
-                <i class="fas fa-plus"></i>
-                <input 
-                    type="text" 
-                    id="todoInput" 
-                    placeholder="Add a task"
-                    class="task-input"
-                >
+            <!-- 오른쪽: 배경 이미지 (PC만) -->
+            <div class="right-panel" id="rightPanel">
+                <div class="background-image"></div>
             </div>
         </div>
     </div>
 
     <script type="module" src="script.js"></script>
+    <script>
+        // 반응형 처리: 모바일/PC 구분
+        function updateResponsive() {
+            const windowBar = document.getElementById('windowBar');
+            const isMobile = window.innerWidth <= 767;
+            const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1023;
+            const isPC = window.innerWidth >= 1024;
+            
+            if (windowBar) {
+                windowBar.style.display = isPC ? 'flex' : 'none';
+            }
+            
+            // 디바이스 타입 로깅
+            const deviceType = isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'PC';
+            console.log(`현재 디바이스: ${deviceType} (${window.innerWidth}px)`);
+        }
+        
+        // 초기 로드 시 실행
+        updateResponsive();
+        
+        // 윈도우 리사이즈 시 실행
+        window.addEventListener('resize', updateResponsive);
+        
+        // 모바일에서 화면 스크롤 방지
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 767) {
+                window.scrollTo(0, 0);
+            }
+        });
+        
+        // 모바일 네비게이션 메뉴 (필요시)
+        const menuBtn = document.querySelector('.menu-btn');
+        menuBtn?.addEventListener('click', () => {
+            console.log('메뉴 클릭됨');
+            // 메뉴 구현 가능
+        });
+        
+        // 모바일 입력 포커스 처리
+        const todoInput = document.getElementById('todoInput');
+        todoInput?.addEventListener('focus', () => {
+            if (window.innerWidth <= 767) {
+                // 모바일에서 키보드가 올라올 때 입력 필드를 화면에 보이게
+                setTimeout(() => {
+                    todoInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+        
+        // PWA 설치 안내 (모바일)
+        if ('serviceWorker' in navigator) {
+            console.log('Service Worker 지원됨');
+        }
+        
+        // 다크 모드 감지 (선택사항)
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            console.log('다크 모드 감지됨');
+        }
+    </script>
 </body>
 </html>
